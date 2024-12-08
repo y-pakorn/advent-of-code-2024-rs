@@ -1,7 +1,7 @@
 use std::{collections::HashSet, env::args, time::Instant};
 
-const INPUT: &str = include_str!("../../day-6-input.txt");
-const INPUT_T: &str = include_str!("../../day-6-input-t.txt");
+const INPUT: &str = include_str!("../../inputs/day-6-input.txt");
+const INPUT_T: &str = include_str!("../../inputs/day-6-input-t.txt");
 
 fn main() {
     let now = Instant::now();

@@ -1,7 +1,7 @@
 use std::{env::args, time::Instant};
 
-const INPUT: &str = include_str!("../../day-7-input.txt");
-const INPUT_T: &str = include_str!("../../day-7-input-t.txt");
+const INPUT: &str = include_str!("../../inputs/day-7-input.txt");
+const INPUT_T: &str = include_str!("../../inputs/day-7-input-t.txt");
 
 type Number = u64;
 
