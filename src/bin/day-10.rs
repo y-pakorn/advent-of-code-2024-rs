@@ -4,41 +4,35 @@ const INPUT: &str = include_str!("../../inputs/day-10-input.txt");
 const INPUT_T: &str = include_str!("../../inputs/day-10-input-t.txt");
 
 fn pathfind(grid: &[Vec<u32>], cur_loc: (usize, usize)) -> (HashSet<(usize, usize)>, usize) {
-    let cur_val = grid[cur_loc.1][cur_loc.0]; // grid[y][x]
-    if cur_val == 9 {
-        return (HashSet::from([cur_loc]), 1);
-    }
+    match grid[cur_loc.1][cur_loc.0] {
+        9 => (HashSet::from([cur_loc]), 1),
+        cur_val => {
+            // search up, down, left, right
+            let mut scores = HashSet::new();
+            let mut rating = 0;
 
-    // search up, down, left, right
-    let mut scores = HashSet::new();
-    let mut rating = 0;
+            for (dx, dy) in [
+                (0, -1), // up
+                (0, 1),  // down
+                (-1, 0), // left
+                (1, 0),  // right
+            ] {
+                let (x, y) = (cur_loc.0 as i32 + dx, cur_loc.1 as i32 + dy);
+                if x >= 0
+                    && x < grid[0].len() as i32
+                    && y >= 0
+                    && y < grid.len() as i32
+                    && grid[y as usize][x as usize] == cur_val + 1
+                {
+                    let (score, r) = pathfind(grid, (x as usize, y as usize));
+                    scores.extend(score);
+                    rating += r;
+                }
+            }
 
-    // up
-    if cur_loc.1 > 0 && grid[cur_loc.1 - 1][cur_loc.0] == cur_val + 1 {
-        let (score, r) = pathfind(grid, (cur_loc.0, cur_loc.1 - 1));
-        scores.extend(score);
-        rating += r;
+            (scores, rating)
+        }
     }
-    // down
-    if cur_loc.1 < grid.len() - 1 && grid[cur_loc.1 + 1][cur_loc.0] == cur_val + 1 {
-        let (score, r) = pathfind(grid, (cur_loc.0, cur_loc.1 + 1));
-        scores.extend(score);
-        rating += r;
-    }
-    // left
-    if cur_loc.0 > 0 && grid[cur_loc.1][cur_loc.0 - 1] == cur_val + 1 {
-        let (score, r) = pathfind(grid, (cur_loc.0 - 1, cur_loc.1));
-        scores.extend(score);
-        rating += r;
-    }
-    // right
-    if cur_loc.0 < grid[0].len() - 1 && grid[cur_loc.1][cur_loc.0 + 1] == cur_val + 1 {
-        let (score, r) = pathfind(grid, (cur_loc.0 + 1, cur_loc.1));
-        scores.extend(score);
-        rating += r;
-    }
-
-    (scores, rating)
 }
 
 fn main() {
